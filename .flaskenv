@@ -1,2 +1,2 @@
-set FLASK_ENV=development
-set FLASK_APP=api
+export FLASK_ENV=development
+export FLASK_APP=api
