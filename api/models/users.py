@@ -1,5 +1,6 @@
 from datetime import datetime
 from api.database import db
+from api.models.heroes import Hero
 
 class User(db.Model):
     __tablename__ = "user"
@@ -9,6 +10,7 @@ class User(db.Model):
     username=db.Column(db.String(25), nullable=False, unique=True)
     email=db.Column(db.String(80), nullable=False, unique=True)
     password=db.Column(db.Text, nullable=False)
+    heroes=db.relationship('Hero', backref='user')
     created_at=db.Column(db.DateTime, default=datetime.now())
     updated_at=db.Column(db.DateTime, onupdate=datetime.now())
 
