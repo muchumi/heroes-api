@@ -7,7 +7,7 @@ class User(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     firstName=db.Column(db.String(50), nullable=False)
     lastName=db.Column(db.String(50), nullable=False)
-    username=db.Column(db.String(25), nullable=False, unique=True)
+    userName=db.Column(db.String(25), nullable=False, unique=True)
     email=db.Column(db.String(80), nullable=False, unique=True)
     password=db.Column(db.Text, nullable=False)
     heroes=db.relationship('Hero', backref='user')
