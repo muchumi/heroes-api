@@ -1,6 +1,6 @@
 from datetime import datetime
 from api.database import db
-from api.models.users import user
+
 
 class Hero(db.Model):
     __tablename__ = 'hero'

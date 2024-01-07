@@ -2,8 +2,9 @@ from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from api.constants.http_status_codes import HTTP_400_BAD_REQUEST, HTTP_409_CONFLICT, HTTP_201_CREATED
 import validators
-from api.database import db
 from api.models.users import User
+from api.database import db
+
 
 users = Blueprint("users", __name__, url_prefix="/api/v1/users")
 
