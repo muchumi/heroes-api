@@ -1,12 +1,18 @@
 from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-from api.constants.http_status_codes import HTTP_400_BAD_REQUEST, HTTP_409_CONFLICT, HTTP_201_CREATED
+from api.constants.http_status_codes import HTTP_400_BAD_REQUEST, HTTP_409_CONFLICT, HTTP_201_CREATED, HTTP_401_UNAUTHORIZED, HTTP_200_OK
 import validators
+from flask_jwt_extended import create_access_token, create_refresh_token
 from api.models.users import User
 from api.database import db
 
 
 users = Blueprint("users", __name__, url_prefix="/api/v1/users")
+
+"""
+    This is the registration endpoint.
+    Users submit their details via this route.
+"""
 
 @users.route("/register", methods=['POST'])
 def register():
@@ -58,6 +64,33 @@ def register():
             'email': email
         }
     }), HTTP_201_CREATED
+
+"""
+    This is the login endpoint.
+"""
+@users.route('/login', methods=['POST'])
+def login():
+    email=request.json.get('email', ' ')
+    password=request.json.get('password', ' ')
+
+    user=User.query.filter_by(email=email).first()
+    if user:
+        is_password_correct=check_password_hash(user.password, password)
+        if is_password_correct:
+            refresh=create_refresh_token(identity=user.id)
+            access=create_access_token(identity=user.id)
+
+            return jsonify({
+                'user': {
+                    'refresh': refresh,
+                    'access': access,
+                    'username': user.userName,
+                    'email': user.email
+                }
+            }), HTTP_200_OK
+    return jsonify({
+        'error': "Invalid credentials provided"
+    }), HTTP_401_UNAUTHORIZED
 
 @users.route("/me", methods=['GET'])
 def me():
