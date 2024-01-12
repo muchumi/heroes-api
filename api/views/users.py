@@ -100,4 +100,4 @@ def me():
     return jsonify({
         'username':user.userName,
         'email':user.email
-    }), HTTP_200_OK
+    }), HTTP_200_OK 
