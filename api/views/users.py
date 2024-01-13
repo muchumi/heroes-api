@@ -11,7 +11,7 @@ users = Blueprint("users", __name__, url_prefix="/api/v1/users")
 
 """
     This is the registration endpoint.
-    Users submit their details via this route.
+    Users submit their details via this route/endpoint.
 """
 
 @users.route("/register", methods=['POST'])
@@ -101,3 +101,16 @@ def me():
         'username':user.userName,
         'email':user.email
     }), HTTP_200_OK 
+
+"""
+    This is the refresh token endpoint.
+    It generates users refresh tokens.
+"""
+@users.route("/token/refresh", methods=['GET'])
+@jwt_required(refresh=True)
+def refresh_token():
+    identity=get_jwt_identity()
+    access=create_access_token(identity=identity)
+    return jsonify({
+        'access':access
+    }),HTTP_200_OK
