@@ -8,6 +8,7 @@ class Hero(db.Model):
     user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
     firstName=db.Column(db.String(50), nullable=False)
     lastName=db.Column(db.String(50), nullable=False)
+    service_number=db.Column(db.Integer, nullable=False)
     year_of_birth=db.Column(db.Integer, nullable=False)
     education=db.Column(db.Text(1000), nullable=False)
     achievements=db.Column(db.Text(1000), nullable=False)
