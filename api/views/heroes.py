@@ -7,6 +7,11 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 
 heroes = Blueprint("heroes", __name__, url_prefix="/api/v1/heroes")
 
+"""
+    This is the create hero profile endpoint.
+    Users are able to create profiles of their heroes.
+"""
+
 @heroes.route("/create_hero_profile", methods=['POST'])
 @jwt_required()
 def create_hero_profile():
@@ -35,6 +40,15 @@ def create_hero_profile():
         'message':"Hero created successfully",
         'id':hero.id,
         'First name':hero.firstName,
-        'Last name':hero.lastName
+        'Last name':hero.lastName,
+        'Service number':hero.service_number
     }), HTTP_201_CREATED
 
+"""
+    This is the get all heroes route.
+    This endpoint allows users retrieve a list of all heroes saved in the database.
+"""
+@heroes.route("/get_all_heroes", methods=['GET'])
+def get_all_heroes():
+    all_heroes=Hero.query.all()
+    return jsonify(all_heroes), HTTP_200_OK
