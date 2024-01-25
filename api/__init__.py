@@ -5,6 +5,7 @@ from api.views.heroes import heroes
 from api.database import db
 from flask_jwt_extended import JWTManager
 
+
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 

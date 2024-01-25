@@ -1,8 +1,7 @@
 from flask import Blueprint, request, jsonify
-from api.models.heroes import Hero
+from api.models.heroes import Hero, hero_schema, heroes_schema
 from api.database import db
 from api.constants.http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_409_CONFLICT
-from api.models.heroes import Hero
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
 heroes = Blueprint("heroes", __name__, url_prefix="/api/v1/heroes")
@@ -49,6 +48,7 @@ def create_hero_profile():
     This endpoint allows users retrieve a list of all heroes saved in the database.
 """
 @heroes.route("/get_all_heroes", methods=['GET'])
+@jwt_required()
 def get_all_heroes():
     all_heroes=Hero.query.all()
-    return jsonify(all_heroes), HTTP_200_OK
+    return heroes_schema.dump(all_heroes), HTTP_200_OK

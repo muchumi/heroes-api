@@ -1,7 +1,8 @@
 from datetime import datetime
 from api.database import db
+from api.database import ma
 
-
+#This is the hero model
 class Hero(db.Model):
     __tablename__ = 'hero'
     id=db.Column(db.Integer, primary_key=True)
@@ -17,3 +18,16 @@ class Hero(db.Model):
 
     def __repr__(self) -> str:
         return 'Hero>>> {self.firstName}'
+    
+class HeroSchema(ma.Schema):
+    class Meta:
+        # Fields to expose
+        fields=('id', 'firstName', 'lastName', 'service_number', 'year_of_birth', 'education', 'achievements')
+
+#Initializing our hero's schema
+#Initializing schema when fetching a single hero
+hero_schema = HeroSchema()
+
+#Initializing schema when fetching many heroes
+heroes_schema=HeroSchema(many=True)
+        
