@@ -69,3 +69,38 @@ def get_a_hero(id):
             'error':"Hero not found"
         }), HTTP_404_NOT_FOUND
     return hero_schema.dump(hero), HTTP_200_OK
+
+"""
+    This is the edit hero endpoint.
+    It allows user to modify hero details in the database.
+"""
+@heroes.route("/edit_hero/<int:id>", methods=['POST'])
+@jwt_required()
+def edit_hero(id):
+    current_user=get_jwt_identity()
+    hero=Hero.query.filter_by(user_id=current_user, id=id).first()
+
+    if not hero:
+        return jsonify({
+            'error':"Hero not found"
+        }), HTTP_404_NOT_FOUND
+    
+    firstName=request.json['firstName']
+    lastName=request.json['lastName']
+    service_number=request.json['service_number']
+    year_of_birth=request.json['year_of_birth']
+    education=request.json['education']
+    achievements=request.json['achievements']
+
+    hero.firstName=firstName
+    hero.lastName=lastName
+    hero.service_number=service_number
+    hero.year_of_birth=year_of_birth
+    hero.education=education
+    hero.achievements=achievements
+
+    db.session.commit()
+
+    return hero_schema.dump(hero), HTTP_200_OK
+
+    
