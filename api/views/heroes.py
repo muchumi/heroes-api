@@ -74,7 +74,7 @@ def get_a_hero(id):
     This is the edit hero endpoint.
     It allows user to modify hero details in the database.
 """
-@heroes.route("/edit_hero/<int:id>", methods=['POST'])
+@heroes.route("/edit_hero/<int:id>", methods=['PUT'])
 @jwt_required()
 def edit_hero(id):
     current_user=get_jwt_identity()
@@ -103,4 +103,24 @@ def edit_hero(id):
 
     return hero_schema.dump(hero), HTTP_200_OK
 
+"""
+    This is the delete a hero endpoint.
+    It allows users to delete records of heroes by id.
+"""  
+@heroes.route("/delete_hero/<int:id>", methods=['DELETE'])
+@jwt_required()
+def delete_hero(id):
+    current_user=get_jwt_identity()
+    hero=Hero.query.filter_by(user_id=current_user, id=id).first()
+
+    if not hero:
+        return jsonify({
+            'error': "Hero not found"
+        }), HTTP_404_NOT_FOUND
+    else:
+        db.session.delete(hero)
+        db.session.commit()
+        return jsonify({
+            'message': "Hero record has been deleted successfully."
+        }), HTTP_200_OK
     
